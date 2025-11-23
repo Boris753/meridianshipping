@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="error-section d-flex align-items-center" style="min-height: 80vh; background: linear-gradient(135deg, #062E39 0%, #0a4456 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="error-card bg-white rounded shadow-lg p-5 text-center">
+                    <!-- Icône animée -->
+                    <div class="error-icon mb-4" style="animation: shake 0.5s;">
+                        <i class="fas fa-search fa-5x error-icon-color"></i>
+                    </div>
+                    
+                    <!-- Message principal -->
+                    <h1 class="display-4 fw-bold mb-3 error-title">
+                        Order Not Found
+                    </h1>
+                    
+                    <!-- Tracking number searched -->
+                    {% if tracking_number %}
+                    <div class="tracking-info mb-4 p-3 rounded">
+                        <p class="mb-2 tracking-label">Tracking number searched:</p>
+                        <h3 class="mb-0 fw-bold tracking-number">
+                            {{ tracking_number }}
+                        </h3>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Detailed message -->
+                    <p class="lead mb-4 error-message">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        No order matches this tracking number.
+                    </p>
+                    
+                    <!-- Suggestions -->
+                    <div class="suggestions mb-4 p-4 rounded">
+                        <h5 class="mb-3 suggestions-title">
+                            <i class="fas fa-lightbulb me-2"></i>Suggestions:
+                        </h5>
+                        <ul class="list-unstyled text-start mb-0 suggestions-list">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Verify that the tracking number is correct
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Tracking numbers are case-sensitive (uppercase/lowercase)
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Make sure there are no spaces at the beginning or end
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle me-2"></i>
+                                The order may not yet be registered in our system
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Action buttons -->
+                    <div class="action-buttons d-flex flex-column flex-md-row justify-content-center gap-3">
+                        <a href="{{ url_for('tracking') }}" class="btn btn-lg px-5 py-3 btn-primary-custom">
+                            <i class="fas fa-search me-2"></i> New Search
+                        </a>
+                        <a href="{{ url_for('orders_list') }}" class="btn btn-outline-custom btn-lg px-5 py-3">
+                            <i class="fas fa-list me-2"></i> View All Orders
+                        </a>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-custom btn-lg px-5 py-3">
+                            <i class="fas fa-home me-2"></i> Back to Home
+                        </a>
+                    </div>
+                    
+                    <!-- Additional help -->
+                    <div class="help-section mt-5 pt-4">
+                        <p class="help-text mb-3">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Need help?
+                        </p>
+                        <p class="mb-0">
+                            <a href="{{ url_for('home') }}" class="help-link">
+                                <i class="fas fa-envelope me-2"></i>Contact our customer service
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Variables de couleurs de l'application */
+    :root {
+        --app-orange: #FD5523;
+        --app-dark: #062E39;
+        --app-gray: #565969;
+        --app-light-gray: #F4F5F9;
+    }
+
+    .error-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .error-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(253, 85, 35, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(253, 85, 35, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .error-card {
+        animation: fadeInUp 0.6s ease-out;
+        border-radius: 8px;
+        border: none;
+        position: relative;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .error-icon-color {
+        color: #FD5523;
+    }
+
+    .error-title {
+        color: #062E39;
+    }
+
+    .tracking-info {
+        background-color: #F4F5F9;
+        border: 2px solid #FD5523;
+    }
+
+    .tracking-label {
+        color: #565969;
+    }
+
+    .tracking-number {
+        color: #062E39;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 2px;
+    }
+
+    .error-message {
+        color: #565969;
+    }
+
+    .suggestions {
+        background-color: #fff3e6;
+        border-left: 4px solid #FD5523;
+    }
+
+    .suggestions-title {
+        color: #062E39;
+    }
+
+    .suggestions-list {
+        color: #565969;
+    }
+
+    .suggestions-list i {
+        color: #FD5523;
+    }
+
+    .btn-primary-custom {
+        background: #FD5523;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary-custom:hover {
+        background: #e54819;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(253, 85, 35, 0.3);
+    }
+
+    .btn-outline-custom {
+        background: transparent;
+        color: #062E39;
+        border: 2px solid #062E39;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-custom:hover {
+        background: #062E39;
+        color: white;
+        border-color: #062E39;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(6, 46, 57, 0.2);
+    }
+
+    .help-section {
+        border-top: 1px solid #F4F5F9;
+    }
+
+    .help-text {
+        color: #565969;
+    }
+
+    .help-link {
+        color: #FD5523;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .help-link:hover {
+        color: #e54819;
+        text-decoration: none;
+    }
+
+    /* Animation pour les boutons */
+    .action-buttons .btn {
+        transition: all 0.3s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .error-card {
+            padding: 2rem !important;
+        }
+
+        .error-icon-color {
+            font-size: 3rem !important;
+        }
+
+        .display-4 {
+            font-size: 2rem !important;
+        }
+
+        .tracking-number {
+            font-size: 1.25rem !important;
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            gap: 1rem !important;
+        }
+
+        .action-buttons .btn {
+            padding: 0.75rem 1.5rem !important;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
+

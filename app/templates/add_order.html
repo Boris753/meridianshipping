@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="add-order-section d-flex align-items-center min-vh-100 py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-10 col-md-12">
+                <div class="form-card p-5 shadow-sm rounded-4 bg-white">
+                    <h2 class="text-center mb-4" style="color: #FD5523;">Add New Order 🧾</h2>
+                    <p class="text-center mb-5 text-muted">Fill in all information to register the order correctly.</p>
+                    
+                    <form method="POST" action="{{ url_for('add_order') }}">
+                        <!-- ================= Sender ================= -->
+                        <h5 class="mb-3 fw-bold text-secondary">Sender</h5>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <input type="text" class="form-control" name="sender_name" placeholder="Name" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="tel" class="form-control" name="sender_phone" placeholder="Phone" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="sender_email" placeholder="Email" required>
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" name="sender_address" rows="2" placeholder="Address" required></textarea>
+                        </div>
+
+                        <!-- ================= Receiver ================= -->
+                        <h5 class="mb-3 fw-bold text-secondary">Receiver</h5>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <input type="text" class="form-control" name="receiver_name" placeholder="Name" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="tel" class="form-control" name="receiver_phone" placeholder="Phone" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="receiver_email" placeholder="Email" required>
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" name="receiver_address" rows="2" placeholder="Address" required></textarea>
+                        </div>
+
+                        <!-- ================= Shipment Details ================= -->
+                        <h5 class="mb-3 fw-bold text-secondary">Shipment Details</h5>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="shipment_name" placeholder="Shipment Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Tracking Number (généré automatiquement)</label>
+                            <input type="text" class="form-control bg-light" value="Généré automatiquement" readonly style="cursor: not-allowed;">
+                            <small class="text-muted">Le numéro de colis sera généré automatiquement au format XXXXXYY lors de l'enregistrement</small>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <input type="text" class="form-control" name="origin_city" placeholder="Origin City" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="text" class="form-control" name="origin_country" placeholder="Origin Country" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <input type="text" class="form-control" name="destination_city" placeholder="Destination City" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="text" class="form-control" name="destination_country" placeholder="Destination Country" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <input type="text" class="form-control" name="current_location" placeholder="Current Location (e.g., In Transit, Delivered)">
+                        </div>
+
+                        <!-- ================= Schedule ================= -->
+                        <h5 class="mb-3 fw-bold text-secondary">Schedule</h5>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <label class="form-label">Pickup Date</label>
+                                <input type="date" class="form-control" name="pickup_date">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Pickup Time</label>
+                                <input type="time" class="form-control" name="pickup_time">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <label class="form-label">Delivery Date</label>
+                                <input type="date" class="form-control" name="delivery_date">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Delivery Time</label>
+                                <input type="time" class="form-control" name="delivery_time">
+                            </div>
+                        </div>
+
+                        <!-- ================= Button ================= -->
+                        <div class="text-start">
+                            <button type="submit" class="btn fw-bold px-5 py-2" style="background-color: #FD5523; color: white; border: none;">
+                                <i class="fas fa-save me-2"></i> Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

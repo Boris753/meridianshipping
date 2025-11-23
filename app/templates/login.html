@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="login-section d-flex align-items-center" style="min-height: 90vh; background: linear-gradient(135deg, #062E39 0%, #0a4456 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="login-card bg-white rounded shadow-lg p-5">
+                    <!-- Logo / Icône -->
+                    <div class="text-center mb-4">
+                        <div class="login-icon mb-3" style="font-size: 4rem; color: #FD5523;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2" style="color: #062E39;">Admin Area</h2>
+                        <p style="color: #565969;">Sign in to manage orders</p>
+                    </div>
+
+                    <!-- Formulaire de connexion -->
+                    <form method="POST" action="{{ url_for('login') }}">
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-semibold" style="color: #062E39;">
+                                <i class="fas fa-envelope me-2" style="color: #FD5523;"></i>Email
+                            </label>
+                            <input 
+                                type="email" 
+                                class="form-control form-control-lg login-input" 
+                                id="email" 
+                                name="email" 
+                                placeholder="admin@example.com"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold" style="color: #062E39;">
+                                <i class="fas fa-lock me-2" style="color: #FD5523;"></i>Password
+                            </label>
+                            <input 
+                                type="password" 
+                                class="form-control form-control-lg login-input" 
+                                id="password" 
+                                name="password" 
+                                placeholder="••••••••"
+                                required
+                                autocomplete="current-password"
+                            >
+                        </div>
+
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-lg btn-login">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Liens additionnels -->
+                    <div class="text-center mt-4 pt-3" style="border-top: 1px solid #F4F5F9;">
+                        <a href="{{ url_for('home') }}" class="text-decoration-none link-home">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </div>
+
+                    <!-- Info sécurité -->
+                    <div class="alert mt-4 mb-0 alert-admin">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <small><strong>Note:</strong> This area is reserved for administrators only.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Variables de couleurs de l'application */
+    :root {
+        --app-orange: #FD5523;
+        --app-dark: #062E39;
+        --app-gray: #565969;
+        --app-light-gray: #F4F5F9;
+    }
+
+    .login-section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(253, 85, 35, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(253, 85, 35, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .login-card {
+        animation: fadeInUp 0.6s ease-out;
+        position: relative;
+        border: none;
+        border-radius: 8px;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .login-icon {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    .login-input {
+        border: 2px solid #F4F5F9;
+        border-radius: 8px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        color: #062E39;
+    }
+
+    .login-input:focus {
+        border-color: #FD5523 !important;
+        box-shadow: 0 0 0 0.2rem rgba(253, 85, 35, 0.15) !important;
+        outline: none;
+    }
+
+    .login-input::placeholder {
+        color: #565969;
+        opacity: 0.6;
+    }
+
+    .btn-login {
+        background: #FD5523;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+        background: #e54819;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(253, 85, 35, 0.3);
+        color: white;
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .link-home {
+        color: #FD5523;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .link-home:hover {
+        color: #e54819;
+        text-decoration: none;
+    }
+
+    .alert-admin {
+        background-color: #fff3e6;
+        border: 1px solid #FD5523;
+        border-radius: 8px;
+        color: #062E39;
+    }
+
+    .alert-admin i {
+        color: #FD5523;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .login-card {
+            padding: 2rem !important;
+        }
+
+        .login-icon {
+            font-size: 3rem !important;
+        }
+    }
+</style>
+{% endblock %}
+

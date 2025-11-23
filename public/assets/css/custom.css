@@ -1,0 +1,33 @@
+/*-----------------------------
+# Header Contacts Visibility on Mobile
+-----------------------------*/
+@media (max-width: 768px) {
+    .main-header-one__top-left {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-bottom: 10px;
+    }
+
+    .main-header-one__top-left ul {
+        flex-direction: column;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    .main-header-one__top-left li {
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .main-header-one__top-left li .icon {
+        min-width: 24px;
+    }
+
+    .main-header-one__top-left li .text-box p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+}

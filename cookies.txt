@@ -1,0 +1,6 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+shippingwebsitesample.site	TRUE	/	FALSE	1999999999	XSRF-TOKEN	heCDEcm3dUj8mns3u0ggiIQ44kiaLULNPeMgBrMf
+shippingwebsitesample.site	TRUE	/	FALSE	1999999999	meridianshippinglogistics_session	pYhBLwmBg16nZixJBonY4U6evbqOkipJ6WiHVpot
+shippingwebsitesample.site	TRUE	/	FALSE	1999999999	samesite	lax
+

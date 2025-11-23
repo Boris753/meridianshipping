@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="add-order-section d-flex align-items-center min-vh-100 py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-10 col-md-12">
+                <div class="form-card p-5 shadow-sm rounded-4 bg-white">
+                    <h2 class="text-center mb-4" style="color: #FD5523;">Edit Order 📝</h2>
+
+                    <form method="POST" action="{{ url_for('edit_order', order_id=order_id) }}">
+                        <h5 class="mb-3 fw-bold text-secondary">Sender</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="sender_name" value="{{ order.sender_name }}" required>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="sender_phone" value="{{ order.sender_phone }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="sender_email" value="{{ order.sender_email }}" required>
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" name="sender_address" rows="2" required>{{ order.sender_address }}</textarea>
+                        </div>
+
+                        <h5 class="mb-3 fw-bold text-secondary">Receiver</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="receiver_name" value="{{ order.receiver_name }}" required>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="receiver_phone" value="{{ order.receiver_phone }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="receiver_email" value="{{ order.receiver_email }}" required>
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" name="receiver_address" rows="2" required>{{ order.receiver_address }}</textarea>
+                        </div>
+
+                        <h5 class="mb-3 fw-bold text-secondary">Shipment Details</h5>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="shipment_name" value="{{ order.shipment_name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="tracking_number" value="{{ order.tracking_number }}" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="origin_city" value="{{ order.origin_city }}" required>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="origin_country" value="{{ order.origin_country }}" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="destination_city" value="{{ order.destination_city }}" required>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <input type="text" class="form-control" name="destination_country" value="{{ order.destination_country }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <input type="text" class="form-control" name="current_location" value="{{ order.current_location|default('', true) }}" placeholder="Current Location">
+                        </div>
+
+                        <h5 class="mb-3 fw-bold text-secondary">Schedule</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Pickup Date</label>
+                                <input type="date" class="form-control" name="pickup_date" value="{{ order.pickup_date|default('', true) }}">
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label class="form-label">Pickup Time</label>
+                                <input type="time" class="form-control" name="pickup_time" value="{{ order.pickup_time|default('', true) }}">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Delivery Date</label>
+                                <input type="date" class="form-control" name="delivery_date" value="{{ order.delivery_date|default('', true) }}">
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label class="form-label">Delivery Time</label>
+                                <input type="time" class="form-control" name="delivery_time" value="{{ order.delivery_time|default('', true) }}">
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">
+                                <i class="fas fa-save me-2"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

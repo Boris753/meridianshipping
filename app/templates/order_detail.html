@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="order-detail-section py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+        <!-- En-tête avec numéro de suivi et code-barres -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="text-center bg-white p-4 rounded shadow-sm">
+                    <h2 class="mb-3" style="color: #007bff; font-weight: bold;">
+                        Tracking Number: {{ order.tracking_number }}
+                    </h2>
+                    <!-- Code-barres simulé avec SVG -->
+                    <svg width="400" height="80" style="margin: 0 auto; display: block;">
+                        <rect x="0" y="0" width="400" height="80" fill="white"/>
+                        <!-- Barres du code-barres -->
+                        <rect x="10" y="10" width="4" height="50" fill="black"/>
+                        <rect x="18" y="10" width="2" height="50" fill="black"/>
+                        <rect x="24" y="10" width="6" height="50" fill="black"/>
+                        <rect x="34" y="10" width="2" height="50" fill="black"/>
+                        <rect x="40" y="10" width="4" height="50" fill="black"/>
+                        <rect x="48" y="10" width="6" height="50" fill="black"/>
+                        <rect x="58" y="10" width="2" height="50" fill="black"/>
+                        <rect x="64" y="10" width="4" height="50" fill="black"/>
+                        <rect x="72" y="10" width="2" height="50" fill="black"/>
+                        <rect x="78" y="10" width="6" height="50" fill="black"/>
+                        <rect x="88" y="10" width="4" height="50" fill="black"/>
+                        <rect x="96" y="10" width="2" height="50" fill="black"/>
+                        <rect x="102" y="10" width="6" height="50" fill="black"/>
+                        <rect x="112" y="10" width="2" height="50" fill="black"/>
+                        <rect x="118" y="10" width="4" height="50" fill="black"/>
+                        <rect x="126" y="10" width="6" height="50" fill="black"/>
+                        <rect x="136" y="10" width="2" height="50" fill="black"/>
+                        <rect x="142" y="10" width="4" height="50" fill="black"/>
+                        <rect x="150" y="10" width="2" height="50" fill="black"/>
+                        <rect x="156" y="10" width="6" height="50" fill="black"/>
+                        <rect x="166" y="10" width="4" height="50" fill="black"/>
+                        <rect x="174" y="10" width="2" height="50" fill="black"/>
+                        <rect x="180" y="10" width="6" height="50" fill="black"/>
+                        <rect x="190" y="10" width="2" height="50" fill="black"/>
+                        <rect x="196" y="10" width="4" height="50" fill="black"/>
+                        <rect x="204" y="10" width="6" height="50" fill="black"/>
+                        <rect x="214" y="10" width="2" height="50" fill="black"/>
+                        <rect x="220" y="10" width="4" height="50" fill="black"/>
+                        <rect x="228" y="10" width="2" height="50" fill="black"/>
+                        <rect x="234" y="10" width="6" height="50" fill="black"/>
+                        <rect x="244" y="10" width="4" height="50" fill="black"/>
+                        <rect x="252" y="10" width="2" height="50" fill="black"/>
+                        <rect x="258" y="10" width="6" height="50" fill="black"/>
+                        <rect x="268" y="10" width="2" height="50" fill="black"/>
+                        <rect x="274" y="10" width="4" height="50" fill="black"/>
+                        <rect x="282" y="10" width="6" height="50" fill="black"/>
+                        <rect x="292" y="10" width="2" height="50" fill="black"/>
+                        <rect x="298" y="10" width="4" height="50" fill="black"/>
+                        <rect x="306" y="10" width="2" height="50" fill="black"/>
+                        <rect x="312" y="10" width="6" height="50" fill="black"/>
+                        <rect x="322" y="10" width="4" height="50" fill="black"/>
+                        <rect x="330" y="10" width="2" height="50" fill="black"/>
+                        <rect x="336" y="10" width="6" height="50" fill="black"/>
+                        <rect x="346" y="10" width="2" height="50" fill="black"/>
+                        <rect x="352" y="10" width="4" height="50" fill="black"/>
+                        <rect x="360" y="10" width="6" height="50" fill="black"/>
+                        <rect x="370" y="10" width="2" height="50" fill="black"/>
+                        <rect x="376" y="10" width="4" height="50" fill="black"/>
+                        <text x="200" y="75" text-anchor="middle" font-size="12" fill="black">{{ order.tracking_number }}</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails Expéditeur et Destinataire -->
+        <div class="row mb-4">
+            <!-- Sender Details -->
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="bg-white rounded shadow-sm h-100">
+                    <h4 class="p-3 mb-0 text-center" style="background-color: #003049; color: white; border-radius: 0.25rem 0.25rem 0 0;">
+                        Sender Details
+                    </h4>
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Name:</td>
+                                <td>{{ order.sender_name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Phone Number:</td>
+                                <td>{{ order.sender_phone }}</td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Email:</td>
+                                <td>{{ order.sender_email }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Address:</td>
+                                <td>{{ order.sender_address }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Receiver Details -->
+            <div class="col-md-6">
+                <div class="bg-white rounded shadow-sm h-100">
+                    <h4 class="p-3 mb-0 text-center" style="background-color: #003049; color: white; border-radius: 0.25rem 0.25rem 0 0;">
+                        Receiver Details
+                    </h4>
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Name:</td>
+                                <td>{{ order.receiver_name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Phone Number:</td>
+                                <td>{{ order.receiver_phone }}</td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Email:</td>
+                                <td>{{ order.receiver_email }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Address:</td>
+                                <td>{{ order.receiver_address }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails de l'envoi et Planification -->
+        <div class="row">
+            <!-- Shipment Details -->
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="bg-white rounded shadow-sm h-100">
+                    <h4 class="p-3 mb-0 text-center" style="background-color: #003049; color: white; border-radius: 0.25rem 0.25rem 0 0;">
+                        Shipment Details
+                    </h4>
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Shipment Name:</td>
+                                <td>{{ order.shipment_name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Tracking Number:</td>
+                                <td>{{ order.tracking_number }}</td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Current Location:</td>
+                                <td>{{ order.current_location|default('In Preparation', true) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Origin:</td>
+                                <td>{{ order.origin_city }}, {{ order.origin_country }}</td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Destination:</td>
+                                <td>{{ order.destination_city }}, {{ order.destination_country }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Schedule & Delivery -->
+            <div class="col-md-6">
+                <div class="bg-white rounded shadow-sm h-100">
+                    <h4 class="p-3 mb-0 text-center" style="background-color: #003049; color: white; border-radius: 0.25rem 0.25rem 0 0;">
+                        Schedule &amp; Delivery
+                    </h4>
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Pickup Date:</td>
+                                <td>{{ order.pickup_date|default('Not Set', true) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Pickup Time:</td>
+                                <td>{{ order.pickup_time|default('Not Set', true) }}</td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa;">
+                                <td class="fw-bold ps-4" style="color: #003049;">Delivery Date:</td>
+                                <td>{{ order.delivery_date|default('Not Set', true) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold ps-4" style="color: #003049;">Delivery Time:</td>
+                                <td>{{ order.delivery_time|default('Not Set', true) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte de suivi du colis -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="bg-white rounded shadow-sm p-4">
+                    <h3 class="text-center mb-4" style="color: #003049; font-weight: bold;">
+                        <i class="fas fa-map-marked-alt me-2"></i> Route Tracking
+                    </h3>
+                    
+                    <!-- Route Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="p-3 border rounded" style="background-color: #e8f4f8;">
+                                <i class="fas fa-plane-departure fa-2x mb-2" style="color: #003049;"></i>
+                                <h6 class="fw-bold">Origin</h6>
+                                <p class="mb-0">{{ order.origin_city }}, {{ order.origin_country }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="p-3 border rounded" style="background-color: #fff3cd;">
+                                <i class="fas fa-shipping-fast fa-2x mb-2" style="color: #856404;"></i>
+                                <h6 class="fw-bold">Current Location</h6>
+                                <p class="mb-0">{{ order.current_location }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="p-3 border rounded" style="background-color: #d4edda;">
+                                <i class="fas fa-plane-arrival fa-2x mb-2" style="color: #155724;"></i>
+                                <h6 class="fw-bold">Destination</h6>
+                                <p class="mb-0">{{ order.destination_city }}, {{ order.destination_country }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carte interactive -->
+                    <div id="shipmentMap" style="height: 500px; width: 100%; border-radius: 8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{{ url_for('orders_list') }}" class="btn btn-secondary px-4 py-2 me-2">
+                    <i class="fas fa-arrow-left me-2"></i> Back to List
+                </a>
+                <a href="{{ url_for('tracking') }}" class="btn btn-primary px-4 py-2">
+                    <i class="fas fa-search me-2"></i> Track Another Shipment
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Function to get approximate coordinates of a city
+    function getCityCoordinates(city, country) {
+        // Simplified database of coordinates for major cities
+        const cities = {
+            // France
+            'Paris': [48.8566, 2.3522],
+            'Lyon': [45.7640, 4.8357],
+            'Marseille': [43.2965, 5.3698],
+            'Toulouse': [43.6047, 1.4442],
+            'Nice': [43.7102, 7.2620],
+            'Nantes': [47.2184, -1.5536],
+            'Bordeaux': [44.8378, -0.5792],
+            
+            // USA
+            'New York': [40.7128, -74.0060],
+            'Los Angeles': [34.0522, -118.2437],
+            'Chicago': [41.8781, -87.6298],
+            'Houston': [29.7604, -95.3698],
+            'Miami': [25.7617, -80.1918],
+            'San Francisco': [37.7749, -122.4194],
+            'Seattle': [47.6062, -122.3321],
+            'Boston': [42.3601, -71.0589],
+            'Washington': [38.9072, -77.0369],
+            
+            // Autres villes internationales
+            'London': [51.5074, -0.1278],
+            'Tokyo': [35.6762, 139.6503],
+            'Beijing': [39.9042, 116.4074],
+            'Shanghai': [31.2304, 121.4737],
+            'Hong Kong': [22.3193, 114.1694],
+            'Singapore': [1.3521, 103.8198],
+            'Dubai': [25.2048, 55.2708],
+            'Sydney': [-33.8688, 151.2093],
+            'Melbourne': [-37.8136, 144.9631],
+            'Berlin': [52.5200, 13.4050],
+            'Madrid': [40.4168, -3.7038],
+            'Rome': [41.9028, 12.4964],
+            'Amsterdam': [52.3676, 4.9041],
+            'Brussels': [50.8503, 4.3517],
+            'Toronto': [43.6532, -79.3832],
+            'Montreal': [45.5017, -73.5673],
+            'Mexico City': [19.4326, -99.1332],
+            'São Paulo': [-23.5505, -46.6333],
+            'Rio de Janeiro': [-22.9068, -43.1729],
+            'Buenos Aires': [-34.6037, -58.3816],
+            'Moscow': [55.7558, 37.6173],
+            'Istanbul': [41.0082, 28.9784],
+            'Cairo': [30.0444, 31.2357],
+            'Mumbai': [19.0760, 72.8777],
+            'Delhi': [28.7041, 77.1025],
+            'Bangkok': [13.7563, 100.5018],
+            'Seoul': [37.5665, 126.9780],
+        };
+        
+        // Search for the city (case insensitive)
+        const cityKey = Object.keys(cities).find(k => k.toLowerCase() === city.toLowerCase());
+        
+        if (cityKey) {
+            return cities[cityKey];
+        }
+        
+        // Default coordinates if city is not found (country center)
+        const countries = {
+            'France': [46.2276, 2.2137],
+            'USA': [37.0902, -95.7129],
+            'United States': [37.0902, -95.7129],
+            'UK': [55.3781, -3.4360],
+            'United Kingdom': [55.3781, -3.4360],
+            'Germany': [51.1657, 10.4515],
+            'Spain': [40.4637, -3.7492],
+            'Italy': [41.8719, 12.5674],
+            'China': [35.8617, 104.1954],
+            'Japan': [36.2048, 138.2529],
+            'Australia': [-25.2744, 133.7751],
+            'Canada': [56.1304, -106.3468],
+        };
+        
+        const countryKey = Object.keys(countries).find(k => k.toLowerCase() === country.toLowerCase());
+        return countryKey ? countries[countryKey] : [0, 0];
+    }
+
+    // Initialiser la carte
+    document.addEventListener('DOMContentLoaded', function() {
+        // Récupérer les informations de l'ordre
+        const originCity = "{{ order.origin_city }}";
+        const originCountry = "{{ order.origin_country }}";
+        const destinationCity = "{{ order.destination_city }}";
+        const destinationCountry = "{{ order.destination_country }}";
+        
+        // Get coordinates
+        const originCoords = getCityCoordinates(originCity, originCountry);
+        const destCoords = getCityCoordinates(destinationCity, destinationCountry);
+        
+        // Calculate current position (approximately in the middle of the route for demo)
+        const currentLat = (originCoords[0] + destCoords[0]) / 2;
+        const currentLng = (originCoords[1] + destCoords[1]) / 2;
+        
+        // Create map centered between origin and destination
+        const centerLat = (originCoords[0] + destCoords[0]) / 2;
+        const centerLng = (originCoords[1] + destCoords[1]) / 2;
+        
+        const map = L.map('shipmentMap').setView([centerLat, centerLng], 4);
+        
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+        
+        // Custom icon for origin point (green)
+        const originIcon = L.divIcon({
+            html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #28a745;"></i>',
+            className: 'custom-div-icon',
+            iconSize: [30, 42],
+            iconAnchor: [15, 42],
+            popupAnchor: [0, -42]
+        });
+        
+        // Custom icon for destination (red)
+        const destIcon = L.divIcon({
+            html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
+            className: 'custom-div-icon',
+            iconSize: [30, 42],
+            iconAnchor: [15, 42],
+            popupAnchor: [0, -42]
+        });
+        
+        // Custom icon for current position (cargo/truck)
+        const currentIcon = L.divIcon({
+            html: '<i class="fas fa-shipping-fast fa-2x" style="color: #007bff; background: white; padding: 5px; border-radius: 50%; border: 3px solid #007bff;"></i>',
+            className: 'custom-div-icon',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+        
+        // Add origin marker
+        L.marker(originCoords, {icon: originIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <h6><i class="fas fa-plane-departure"></i> Origin</h6>
+                    <p><strong>${originCity}, ${originCountry}</strong></p>
+                    <p>Date: {{ order.pickup_date|default('Not Set', true) }}</p>
+                </div>
+            `);
+        
+        // Add destination marker
+        L.marker(destCoords, {icon: destIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <h6><i class="fas fa-plane-arrival"></i> Destination</h6>
+                    <p><strong>${destinationCity}, ${destinationCountry}</strong></p>
+                    <p>Expected Date: {{ order.delivery_date|default('Not Set', true) }}</p>
+                </div>
+            `);
+        
+        // Add current position marker
+        L.marker([currentLat, currentLng], {icon: currentIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <h6><i class="fas fa-shipping-fast"></i> Current Location</h6>
+                    <p><strong>{{ order.current_location }}</strong></p>
+                    <p>Shipment: {{ order.shipment_name }}</p>
+                    <p>Tracking: {{ order.tracking_number }}</p>
+                </div>
+            `)
+            .openPopup();
+        
+        // Draw a line between origin and destination
+        const routeLine = L.polyline([originCoords, destCoords], {
+            color: '#6c757d',
+            weight: 2,
+            opacity: 0.5,
+            dashArray: '10, 10'
+        }).addTo(map);
+        
+        // Draw a thicker line for the already traveled portion
+        const completedLine = L.polyline([originCoords, [currentLat, currentLng]], {
+            color: '#007bff',
+            weight: 4,
+            opacity: 0.8
+        }).addTo(map);
+        
+        // Adjust view to display all markers
+        const bounds = L.latLngBounds([originCoords, destCoords, [currentLat, currentLng]]);
+        map.fitBounds(bounds, { padding: [50, 50] });
+    });
+</script>
+
+<style>
+    /* Style for custom icons */
+    .custom-div-icon {
+        background: none;
+        border: none;
+    }
+    
+    /* Animation for current position marker */
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    .leaflet-marker-icon {
+        animation: pulse 2s infinite;
+    }
+</style>
+
+{% endblock %}
