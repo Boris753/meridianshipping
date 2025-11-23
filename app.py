@@ -203,6 +203,7 @@ else:
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 # Configuration des options du moteur SQLAlchemy
 # Sur Vercel, on ne peut pas utiliser le système de fichiers pour les pools de connexion
 engine_options = {}
