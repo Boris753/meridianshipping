@@ -157,9 +157,12 @@ if is_vercel:
 else:
     instance_path = None
 
-# When deploying on Vercel, static assets are served from `public/**` by the CDN.
-# Do not set Flask's `static_folder`/`static_url_path` to avoid conflicts with Vercel.
-app = Flask(__name__, template_folder=template_dir)
+# Configuration Flask pour les templates et fichiers statiques
+# Sur Vercel, on doit servir les fichiers statiques via Flask car ils ne sont pas dans public/
+app = Flask(__name__, 
+            template_folder=template_dir,
+            static_folder=static_dir,
+            static_url_path='/static')
 
 # Configuration de la base de données
 # Sur Vercel, SQLite ne fonctionne pas (pas de persistance)
@@ -390,6 +393,12 @@ def home():
 def tracking():
     """Page de suivi de colis"""
     return render_template('tracking.html', title="Suivi de colis")
+
+# Route pour servir les fichiers statiques (nécessaire pour Vercel)
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Servir les fichiers statiques"""
+    return send_from_directory(app.static_folder, filename)
 
 
 # ============================
