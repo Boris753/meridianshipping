@@ -12,6 +12,10 @@
       "dest": "app.py"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "app.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.py"
     }

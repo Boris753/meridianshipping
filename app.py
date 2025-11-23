@@ -164,6 +164,21 @@ app = Flask(__name__,
             static_folder=static_dir,
             static_url_path='/static')
 
+# Ajouter un filtre Jinja2 pour convertir les chemins relatifs en chemins statiques
+@app.template_filter('static_path')
+def static_path_filter(path):
+    """Convertit un chemin relatif en chemin statique Flask"""
+    if path.startswith('assets/'):
+        return url_for('static', filename=path)
+    elif path.startswith('/assets/'):
+        return url_for('static', filename=path[1:])  # Enlever le / initial
+    elif path.startswith('static/'):
+        return url_for('static', filename=path[7:])  # Enlever 'static/'
+    elif path.startswith('/static/'):
+        return url_for('static', filename=path[8:])  # Enlever '/static/'
+    else:
+        return url_for('static', filename=path)
+
 # Configuration de la base de données
 # Sur Vercel, SQLite ne fonctionne pas (pas de persistance)
 # Il est fortement recommandé de configurer DATABASE_URL avec une base PostgreSQL
@@ -397,8 +412,27 @@ def tracking():
 # Route pour servir les fichiers statiques (nécessaire pour Vercel)
 @app.route('/static/<path:filename>')
 def serve_static(filename):
-    """Servir les fichiers statiques"""
-    return send_from_directory(app.static_folder, filename)
+    """Servir les fichiers statiques avec les bons en-têtes"""
+    try:
+        response = send_from_directory(app.static_folder, filename)
+        # Ajouter des en-têtes de cache pour améliorer les performances
+        if filename.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico')):
+            response.headers['Cache-Control'] = 'public, max-age=31536000'  # 1 an
+        elif filename.endswith(('.css', '.js')):
+            response.headers['Cache-Control'] = 'public, max-age=86400'  # 1 jour
+        return response
+    except FileNotFoundError:
+        # Si le fichier n'est pas trouvé, retourner une 404
+        return jsonify({"error": "File not found", "filename": filename}), 404
+
+# Route pour servir les assets avec chemins relatifs (compatibilité)
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    """Servir les assets depuis app/static/assets pour compatibilité avec les chemins relatifs"""
+    try:
+        return send_from_directory(os.path.join(app.static_folder, 'assets'), filename)
+    except FileNotFoundError:
+        return jsonify({"error": "Asset not found", "filename": filename}), 404
 
 
 # ============================
