@@ -183,16 +183,24 @@ def static_path_filter(path):
 # Utilise Neon PostgreSQL hébergé sur Vercel
 # La chaîne de connexion doit être définie dans DATABASE_URL (variables d'environnement)
 database_url = os.environ.get('DATABASE_URL')
+# Si vous voulez forcer l'utilisation de la base distante (Neon) en local,
+# exportez USE_REMOTE_DB=1 dans votre environnement. Dans ce cas,
+# DATABASE_URL est obligatoire et l'application s'arrêtera si elle est absente.
+use_remote_db = os.environ.get('USE_REMOTE_DB') == '1'
 
 if not database_url:
-    # Développement local uniquement : utiliser SQLite
-    # En production (Vercel), DATABASE_URL DOIT être configuré
+    if use_remote_db:
+        # L'utilisateur a demandé explicitement d'utiliser la DB distante mais
+        # DATABASE_URL n'est pas défini : échouer rapidement pour éviter des comportements inattendus.
+        print("⚠️  USE_REMOTE_DB=1 défini mais DATABASE_URL est manquant. Arrêt.")
+        raise RuntimeError('DATABASE_URL is required when USE_REMOTE_DB=1')
+
+    # Valeur par défaut pour le développement local uniquement (fallback SQLite)
     instance_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
     try:
         os.makedirs(instance_dir, exist_ok=True)
     except Exception as e:
         print(f"⚠️  Erreur lors de la création du dossier instance : {str(e)}")
-    
     database_url = f'sqlite:///{os.path.join(instance_dir, "dev.db")}'
     print("⚠️  DATABASE_URL non configuré → Utilisation de SQLite (dev local uniquement)")
     print(f"✓ Chemin SQLite : {database_url}")
