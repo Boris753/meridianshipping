@@ -180,84 +180,69 @@ def static_path_filter(path):
         return url_for('static', filename=path)
 
 # Configuration de la base de données
-# Sur Vercel, SQLite ne fonctionne pas (pas de persistance)
-# Il est fortement recommandé de configurer DATABASE_URL avec une base PostgreSQL
+# Utilise Neon PostgreSQL hébergé sur Vercel
+# La chaîne de connexion doit être définie dans DATABASE_URL (variables d'environnement)
 database_url = os.environ.get('DATABASE_URL')
 
 if not database_url:
-    if os.environ.get('VERCEL') == '1':
-        # Sur Vercel, on ne peut pas utiliser SQLite
-        # Utiliser une URL PostgreSQL factice pour éviter les erreurs d'initialisation
-        # L'utilisateur devra configurer DATABASE_URL dans les variables d'environnement Vercel
-        database_url = 'postgresql://user:pass@localhost/dbname'
-        print("⚠️  ERREUR CRITIQUE: DATABASE_URL non configuré sur Vercel")
-        print("⚠️  Veuillez configurer DATABASE_URL dans les variables d'environnement Vercel")
-        print("⚠️  L'application ne fonctionnera pas correctement sans une base de données PostgreSQL")
-    else:
-        # Valeur par défaut pour le développement local uniquement
-        # Créer le dossier instance s'il n'existe pas
-        instance_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
-        try:
-            os.makedirs(instance_dir, exist_ok=True)
-        except Exception as e:
-            print(f"⚠️  Erreur lors de la création du dossier instance : {str(e)}")
-        database_url = f'sqlite:///{os.path.join(instance_dir, "dev.db")}'
-        print("⚠️  ATTENTION: DATABASE_URL non configuré. Utilisation de SQLite (développement local uniquement)")
-        print(f"✓ Base de données SQLite : {database_url}")
+    # Développement local uniquement : utiliser SQLite
+    # En production (Vercel), DATABASE_URL DOIT être configuré
+    instance_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
+    try:
+        os.makedirs(instance_dir, exist_ok=True)
+    except Exception as e:
+        print(f"⚠️  Erreur lors de la création du dossier instance : {str(e)}")
+    
+    database_url = f'sqlite:///{os.path.join(instance_dir, "dev.db")}'
+    print("⚠️  DATABASE_URL non configuré → Utilisation de SQLite (dev local uniquement)")
+    print(f"✓ Chemin SQLite : {database_url}")
 else:
-    # Nettoyer l'URL (supprimer les espaces, etc.)
+    # Nettoyer l'URL et assurer que SSL est configuré
     database_url = database_url.strip()
-    # Pour Render.com PostgreSQL, ajouter le mode SSL si nécessaire
-    if 'render.com' in database_url and '?sslmode=' not in database_url:
-        # Ajouter le paramètre SSL pour Render
+    # Si l'URL Neon/PostgreSQL n'a pas de sslmode, l'ajouter
+    if 'postgresql' in database_url and '?sslmode=' not in database_url:
         separator = '&' if '?' in database_url else '?'
         database_url = f"{database_url}{separator}sslmode=require"
-    # Pour Vercel avec PostgreSQL, s'assurer que SSL est activé
-    if os.environ.get('VERCEL') == '1' and 'postgresql://' in database_url and '?sslmode=' not in database_url:
-        separator = '&' if '?' in database_url else '?'
-        database_url = f"{database_url}{separator}sslmode=require"
-    print("✓ Base de données PostgreSQL configurée")
+    print("✓ PostgreSQL (Neon) configuré avec SSL")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 # Configuration des options du moteur SQLAlchemy
-# Sur Vercel, on ne peut pas utiliser le système de fichiers pour les pools de connexion
-engine_options = {}
-
-# Configurer les options selon le type de base de données
+# Adapter les options selon le type de base de données
 database_url_lower = database_url.lower()
+
 if 'postgresql' in database_url_lower or 'postgres' in database_url_lower:
-    # Options pour PostgreSQL
-    print("✓ Configuration PostgreSQL détectée")
+    # Configuration pour PostgreSQL (Neon)
+    print("✓ PostgreSQL (Neon) détecté")
     engine_options = {
-        'pool_pre_ping': True,  # Vérifier les connexions avant utilisation
-        'pool_recycle': 300,    # Recycler les connexions après 5 minutes
+        'pool_pre_ping': True,        # Vérifier les connexions avant utilisation
+        'pool_recycle': 300,          # Recycler les connexions après 5 minutes
         'connect_args': {
-            'connect_timeout': 10  # Timeout de connexion de 10 secondes (uniquement pour PostgreSQL)
+            'connect_timeout': 10,    # Timeout de connexion
+            'sslmode': 'require'      # SSL obligatoire pour Neon
         }
     }
     
-    # Sur Vercel, utiliser un pool NullPool pour éviter les problèmes de fichiers
+    # Sur Vercel (serverless), utiliser NullPool pour éviter les problèmes de persistence du pool
     if os.environ.get('VERCEL') == '1':
         from sqlalchemy.pool import NullPool
         engine_options['poolclass'] = NullPool
-        # Ne pas utiliser le système de fichiers pour les pools
-        engine_options.pop('pool_pre_ping', None)  # NullPool n'a pas besoin de pre_ping
-        # Garder connect_timeout pour PostgreSQL même avec NullPool
+        engine_options.pop('pool_pre_ping', None)  # NullPool n'utilise pas pool_pre_ping
+        print("✓ Vercel détecté → Utilisation de NullPool (serverless)")
+        
 elif 'sqlite' in database_url_lower:
-    # Options pour SQLite (pas de connect_timeout)
-    print("✓ Configuration SQLite détectée")
+    # Configuration pour SQLite (dev local)
+    print("✓ SQLite détecté (développement local)")
     engine_options = {
         'connect_args': {
             'check_same_thread': False  # Permettre l'utilisation dans plusieurs threads
         }
     }
-    # SQLite n'a pas besoin de pool_pre_ping ni pool_recycle
 else:
-    # Options par défaut pour autres bases de données
-    print(f"⚠ Configuration de base de données non reconnue : {database_url_lower}")
+    # Fallback pour autres BDs
+    print(f"⚠ Type de BD non reconnu : {database_url_lower}")
     engine_options = {
         'pool_pre_ping': True,
         'pool_recycle': 300
