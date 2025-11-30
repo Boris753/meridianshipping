@@ -2,24 +2,44 @@
 Application Flask consolidée pour le déploiement sur Vercel
 Tous les services et fonctionnalités sont regroupés dans ce fichier unique
 """
+# IMPORTANT: Charger .env EN PREMIER, avant les autres imports
+import os
+import sys
+
+# Charger .env manuellement pour éviter les problèmes avec les caractères spéciaux (@, ?, etc)
+def load_env_file():
+    possible_paths = [
+        os.path.join(os.path.dirname(__file__), '.env'),
+        os.path.join(os.getcwd(), '.env'),
+    ]
+    for dotenv_path in possible_paths:
+        if os.path.exists(dotenv_path):
+            try:
+                with open(dotenv_path, 'r', encoding='utf-8-sig') as f:  # utf-8-sig enlève le BOM
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith('#') and '=' in line:
+                            key, value = line.split('=', 1)
+                            key = key.strip()
+                            value = value.strip().strip('"\'')
+                            os.environ.setdefault(key, value)
+                print(f"✓ Chargement de .env depuis : {dotenv_path}")
+                return
+            except Exception as e:
+                print(f"⚠ Erreur lors de la lecture de .env : {e}")
+                pass
+
+load_env_file()
+
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from sqlalchemy import text
-import os
 import uuid
 import random
 import string
-
-# Charger les variables d'environnement depuis .env (pour le développement local)
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    # python-dotenv n'est pas installé, ce n'est pas grave pour la production
-    pass
 
 # ============================
 #   EXTENSIONS FLASK
